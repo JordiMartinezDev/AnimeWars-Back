@@ -1,0 +1,57 @@
+# Portafolio-back
+
+## AnimeWars
+Developed as the final project of my web development bootcamp at Ironhack Barcelona. It's a MERN Stack application, check the back repository here<link>
+
+## About
+ededededdee.
+
+
+## Deployment
+
+You can check the app fully deployed here(link). If you wish to view the API deployment instead, check here(link)
+
+## Work structure
+
+We developed this project in group and used Trello(link) to organize our workflow.
+
+## Installation guide
+
+*Fork this repo
+*Clone this repo
+
+```
+$ cd portafolio-front
+$ npm install
+$ npm start
+```
+
+## Models
+**User.model.js**
+```
+const userSchema = new Schema({
+})
+```
+
+**Anime.model.js**
+```
+const AnimeSchema = new Schema({
+})
+```
+
+## User roles
+
+| Role          | Capabilities  | Property      |
+| ------------- |:-------------:|:-------------:|
+| User          | Can Signup and login....     | is Admin: false     |
+| Admin      | Can login/logout. Can...    | isAdmin: true     |
+
+## API Reference
+
+| Method        | Endpoint | Require | Response (200) | 
+| ------------- |:-------------:|:-------------:|:-------------:|
+| left foo      | right foo     | right foo     | right foo     |
+| left bar      | right bar     | right bar     | right bar     |
+| left baz      | right baz     | right baz     |right baz      |
+
+
