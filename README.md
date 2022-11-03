@@ -1,6 +1,6 @@
-# Portafolio-back
 
-## AnimeWars
+
+# AnimeWars
 Developed as the final project of my web development bootcamp at Ironhack Barcelona. It's a MERN Stack application, check the back repository here<link>
 
 ## About
@@ -17,11 +17,15 @@ We developed this project in group and used Trello(link) to organize our workflo
 
 ## Installation guide
 
-*Fork this repo
-*Clone this repo
+
+Fork this repo
+Clone this repo
+$ cd AnimeWars-back
+$ npm install
+$ npm start
 
 ```
-$ cd portafolio-front
+$ cd AnimeWars-front
 $ npm install
 $ npm start
 ```
@@ -33,6 +37,7 @@ $ npm start
 | Role          | Capabilities  | Property      |
 | ------------- |:-------------:|:-------------:|
 | User          | Can Signup and login....     | isAdmin: false     |
+| Premium      | Can login/logout. Can...    | isAdmin: true     |
 | Admin      | Can login/logout. Can...    | isAdmin: true     |
 
 ### Models
@@ -156,15 +161,14 @@ const episodeSchema = new Schema(
 
 ## Routes
 
-| Route Type    | Route     |
-| ------------- |:-------------:|
-| GET       | /  |
-| POST       | /login    |
-| POST      | /signup     |
-| GET       | /profile/:userId  |
-| PUT       | /profile/:userId    |
-| GET      | /showMyAnimeList/:userId     |
-| PUT       | /showMyAnimeList/:userId  |
-| GET       | /showMyEpisodes/:userId    |
-| POST      | /uploadVideo/:userId     |
+| Route Type    | Route     |Require|Response (200)|Action|
+| ------------- |:-------------:||||
+| GET       | /  |-|de|wd
+| POST       | /login    |const { email, password } = req.body|json({authToken: authToken})|Reads DB to Auth&Login user
+| POST      | /signup     |const { username, email, password } = req.body|json({user: user})|Creates new User(unique)
+| GET       | /profile/:userId  |-|json({thisUser})|Returns user if logged
+| PUT       | /profile/:userId    |-|json({message: "Edition completed"})| Updates profile
+| GET      | /showMyAnimeList/:userId | -|json({[animeId]}| Returns array of Anime IDs
+| PUT       | /showMyAnimeList/:userId  |-|json({updatedAnimeList})}| Updates Animes folloed list
+| POST      | /uploadVideo/:userId     |const { name, number, episodeImg, episodeUrl } = req.body | json({message: "Episode Uploaded"})| Uploads Episode to DB
 
