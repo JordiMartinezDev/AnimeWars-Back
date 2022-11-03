@@ -160,7 +160,6 @@ const episodeSchema = new Schema(
 
 
 ## Routes
-
 | Route Type    | Route     |Require|Response (200)|Action|
 | ------------- |:-------------:||||
 | GET       | /  |-|de|wd
@@ -171,4 +170,5 @@ const episodeSchema = new Schema(
 | GET      | /showMyAnimeList/:userId | -|json({[animeId]}| Returns array of Anime IDs
 | PUT       | /showMyAnimeList/:userId  |-|json({updatedAnimeList})}| Updates Animes folloed list
 | POST      | /uploadVideo/:userId     |const { name, number, episodeImg, episodeUrl } = req.body | json({message: "Episode Uploaded"})| Uploads Episode to DB
+
 
