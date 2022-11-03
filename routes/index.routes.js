@@ -1,4 +1,5 @@
 const express = require("express");
+const { create } = require("hbs");
 const router = express.Router();
 const AnimeModel = require("../models/Anime.model");
 const EpisodeModel = require("../models/Episode.model");
@@ -13,6 +14,14 @@ router.get("/animes/:animeId", (req, res, next) => {
 });
 router.post("/animes", (req, res, next) => {
   console.log("this is add new anime: ROUTE POST /");
+
+  AnimeModel.create(req.body)
+    .then((response) => {
+      res.json(response);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 });
 router.put("animes/:animeId", (req, res, next) => {
   console.log("this is EDIT: ROUTE PUT /:animeId");
@@ -34,6 +43,13 @@ router.get("/episodes/:episodeId", (req, res, next) => {
 });
 router.post("/episodes", (req, res, next) => {
   console.log("this is add new episode: ROUTE POST /");
+  EpisodeModel.create(req.body)
+    .then((response) => {
+      res.json(response);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 });
 router.put("episodes/:episodeId", (req, res, next) => {
   console.log("this is EDIT: ROUTE PUT /:episodeId");
@@ -63,14 +79,13 @@ router.post("/uploadVideo/:userId", (req, res, next) => {
     number: 12,
     episodeImg: "episodio 12",
     isPremium: false,
-  })
-    .then((episode) => {
-      return User.findByIdAndUpdate(
-        req.params.userId,
-        { $push: { episodes: episode._id } },
-        { new: true }
-      );
-    })
-})
+  }).then((episode) => {
+    return User.findByIdAndUpdate(
+      req.params.userId,
+      { $push: { episodes: episode._id } },
+      { new: true }
+    );
+  });
+});
 
 module.exports = router;
