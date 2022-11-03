@@ -42,4 +42,35 @@ router.delete("episodes/:episodeId", (req, res, next) => {
   console.log("this is DELETe : ROUTE DEL /:episodeId");
 });
 
+// router.post("/uploadVideo/:userId", (req, res, next) => {
+//   Episode.create({
+//     name: req.body.name,
+//     number: req.body.number,
+//     episodeImg: req.body.episodeImg,
+//   })
+//     .then((episode) => {
+//       return User.findByIdAndUpdate(
+//         req.params.userId,
+//         { $push: { episodes: episode._id } },
+//         { new: true }
+//       );
+//     })
+// })
+
+router.post("/uploadVideo/:userId", (req, res, next) => {
+  Episode.create({
+    name: "naruto",
+    number: 12,
+    episodeImg: "episodio 12",
+    isPremium: false,
+  })
+    .then((episode) => {
+      return User.findByIdAndUpdate(
+        req.params.userId,
+        { $push: { episodes: episode._id } },
+        { new: true }
+      );
+    })
+})
+
 module.exports = router;
