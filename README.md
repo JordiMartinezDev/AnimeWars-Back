@@ -32,7 +32,7 @@ $ npm start
 
 | Role          | Capabilities  | Property      |
 | ------------- |:-------------:|:-------------:|
-| User          | Can Signup and login....     | is Admin: false     |
+| User          | Can Signup and login....     | isAdmin: false     |
 | Admin      | Can login/logout. Can...    | isAdmin: true     |
 
 ### Models
