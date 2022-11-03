@@ -30,6 +30,43 @@ $ npm start
 **User.model.js**
 ```
 const userSchema = new Schema({
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true
+  },
+  email: {
+    type: String,
+    required: true,
+    match: [/^\S+@\S+.\S+$/, "Please use a valid email address."],
+    unique: true,
+    trim: true,
+    lowercase: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+   profileImg: {
+    type: String,
+    default: "/images/profileuser.png",
+  },
+  isAdmin: {
+    type: Boolean,
+    default: false
+  },
+  isPremium:{
+    type: Boolean,
+    default: false
+  },
+  likedEpisodes: [{ type: Schema.Types.ObjectId, ref: "Episode" }],
+  followedAnime: [{ type: Schema.Types.ObjectId, ref: "Anime" }],
+  },
+  {
+  timestamps: true,
+  }
+
 })
 ```
 
