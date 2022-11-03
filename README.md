@@ -66,13 +66,34 @@ const userSchema = new Schema({
   {
   timestamps: true,
   }
-
 })
 ```
 
 **Anime.model.js**
 ```
-const AnimeSchema = new Schema({
+const animeSchema = new Schema({
+  name: {
+      type: String,
+      required: true,
+      unique: true,
+  },
+  category: {
+      type: String,
+      enum : ["Shonen", "Drama", "Action"]
+  },  
+  animeUrl: {
+      type: String,
+  },
+  description: {
+      type: String,
+      default: "Serie Anime"
+  },
+  episodes: [{ type: Schema.Types.ObjectId, ref: "Episode" }],
+  followedUsers: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  },
+  {
+   timestamps: true,
+  }
 })
 ```
 
