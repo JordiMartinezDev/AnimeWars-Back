@@ -160,9 +160,10 @@ const episodeSchema = new Schema(
 
 
 ## Routes
+
 | Route Type    | Route     |Require|Response (200)|Action|
-| ------------- |:-------------:||||
-| GET       | /  |-|de|wd
+| ------------- |:-------------:|:-------------:|:--------------:|:---------------:|
+| GET       | /  |-||
 | POST       | /login    |const { email, password } = req.body|json({authToken: authToken})|Reads DB to Auth&Login user
 | POST      | /signup     |const { username, email, password } = req.body|json({user: user})|Creates new User(unique)
 | GET       | /profile/:userId  |-|json({thisUser})|Returns user if logged
@@ -170,5 +171,6 @@ const episodeSchema = new Schema(
 | GET      | /showMyAnimeList/:userId | -|json({[animeId]}| Returns array of Anime IDs
 | PUT       | /showMyAnimeList/:userId  |-|json({updatedAnimeList})}| Updates Animes folloed list
 | POST      | /uploadVideo/:userId     |const { name, number, episodeImg, episodeUrl } = req.body | json({message: "Episode Uploaded"})| Uploads Episode to DB
+
 
 
