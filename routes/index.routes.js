@@ -17,7 +17,15 @@ multer({
 
 router.get("/animes", (req, res, next) => {
   console.log("THIS IS BACK" + "/" + " ROUTE'S RESPONSE");
-  // res.json("All good in here");
+  AnimeModel.find()
+    .then((animesFromDB) => {
+      console.log("Retrieved animes from DB:", animesFromDB);
+      res.status(200).json(animesFromDB);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({ message: "Error finding animes" });
+    });
 });
 
 router.get("/animes/:animeId", (req, res, next) => {});
