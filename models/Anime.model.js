@@ -1,0 +1,35 @@
+const { Schema, model } = require("mongoose");
+// TODO: Please make sure you edit the User model to whatever makes sense in this case
+const animeSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      unique: true,
+      
+    },
+    category: {
+      type: String,
+      enum : ["Shonen", "Drama", "Action"]
+        
+    },
+    
+    animeUrl: {
+      type: String,
+     
+    },
+    description: {
+      type: String,
+      default: "Serie Anime"
+    },
+    episodes: [{ type: Schema.Types.ObjectId, ref: "Episode" }],
+    followedUsers: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  },
+  
+  {
+    // this second object adds extra properties: `createdAt` and `updatedAt`
+    timestamps: true,
+  }
+);
+const Anime = model("Anime", animeSchema);
+module.exports = Anime;
