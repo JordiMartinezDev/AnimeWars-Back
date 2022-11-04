@@ -79,7 +79,7 @@ const userSchema = new Schema(
   }
 );
 ```
-1. Anime
+2. Anime
 ```
 const animeSchema = new Schema(
   {
@@ -113,7 +113,7 @@ const animeSchema = new Schema(
   }
 );
 ```
-1. Episode
+3. Episode
 ```
 const episodeSchema = new Schema(
   {
