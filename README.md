@@ -1,44 +1,37 @@
 
 
 # AnimeWars
-Developed as the final project of my web development bootcamp at Ironhack Barcelona. It's a MERN Stack application, check the back repository here<link>
+Developed as the final project of my web development bootcamp at Ironhack Barcelona. It's a MERN Stack application, check the back repository [here](https://github.com/JordiMartinezDev/AnimeWars-Front/).
 
 ## About
-ededededdee.
+This project is based on the development of a Crunchyroll-style website in which users can register, log in as well as view, add, delete and follow their favorite anime.
 
 
 ## Deployment
-
-You can check the app fully deployed here(link). If you wish to view the API deployment instead, check here(link)
+You can check the app fully deployed [here](link). If you wish to view the API deployment instead, check [here](link)
 
 ## Work structure
 
-We developed this project in group and used Trello(link) to organize our workflow.
+We developed this project in group and used [Trello](https://trello.com/b/gPwpHZUL/proyecto-final-animewars) to organize our workflow.
 
 ## Installation guide
 
-
 Fork this repo
 Clone this repo
-$ cd AnimeWars-back
-$ npm install
-$ npm start
 
 ```
-$ cd AnimeWars-front
+$ cd AnimeWars-Back
 $ npm install
 $ npm start
 ```
-
-
 
 ## User roles
 
 | Role          | Capabilities  | Property      |
 | ------------- |:-------------:|:-------------:|
-| User          | Can Signup and login....     | isAdmin: false     |
-| Premium      | Can login/logout. Can...    | isAdmin: true     |
-| Admin      | Can login/logout. Can...    | isAdmin: true     |
+| User          | Can Signup, login/logout, can edit his profile, can view (a limited number of chapters), add and delete chapters of his favorite anime.      | isAdmin: false, isPremium: false     |
+| User Premium      | Can login/logout, can edit his profile, can view (an unlimited number of chapters), add and delete chapters of his favorite anime. | isAdmin: false isPremium: true     |
+| Admin      | Can login/logout, performs content control, validates the episodes and series uploaded by users, can delete episodes if it considers that the content is not appropriate.  | isAdmin: true     |
 
 ### Models
 
