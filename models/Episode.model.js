@@ -12,16 +12,14 @@ const episodeSchema = new Schema(
 
     episodeImg: {
       type: String,
-      default: "/images/profileuser.png",
+      default: "https://www3.animeflv.net/uploads/animes/thumbs/3707.jpg",
     },
     isPremium: {
       type: Boolean,
       default: false,
-      require: true,
     },
     episodeUrl: {
       type: String,
-      require: true,
     },
 
     animeTitle: { type: Schema.Types.ObjectId, ref: "Anime" }, //Si vols treure el nom del anime fes servir populate.

@@ -1,8 +1,19 @@
 const express = require("express");
 const { create } = require("hbs");
 const router = express.Router();
+const multer = require("multer");
+
+//REQ MODELS
 const AnimeModel = require("../models/Anime.model");
 const EpisodeModel = require("../models/Episode.model");
+
+//CLOUDINARY
+const fileUploader = require("../config/cloudinary.config");
+//CLOUDINARY
+multer({
+  storage: multer.diskStorage({}),
+  limits: { fileSize: 500000 },
+});
 
 router.get("/animes", (req, res, next) => {
   console.log("THIS IS BACK" + "/" + " ROUTE'S RESPONSE");
@@ -41,16 +52,22 @@ router.get("/episodes", (req, res, next) => {
 router.get("/episodes/:episodeId", (req, res, next) => {
   console.log("this is : ROUTE GET /:episodeId");
 });
+
 router.post("/episodes", (req, res, next) => {
-  console.log("this is add new episode: ROUTE POST /");
+  console.log("REQ.BODY : ", req.body);
+  console.log("REQ.FILE : ", req.file);
+  console.log("REQ.FILESSS : ", req.files);
+
   EpisodeModel.create(req.body)
     .then((response) => {
+      //res.json({ animeImageUrl: req.file.path });
       res.json(response);
     })
     .catch((e) => {
       console.log(e);
     });
 });
+
 router.put("episodes/:episodeId", (req, res, next) => {
   console.log("this is EDIT: ROUTE PUT /:episodeId");
 });
