@@ -20,15 +20,21 @@ router.get("/animes", (req, res, next) => {
   // res.json("All good in here");
 });
 
-router.get("/animes/:animeId", (req, res, next) => {
-  console.log("this is : ROUTE GET /:animeId");
-});
-router.post("/animes", (req, res, next) => {
-  console.log("this is add new anime: ROUTE POST /");
+router.get("/animes/:animeId", (req, res, next) => {});
 
-  AnimeModel.create(req.body)
+router.post("/animes", fileUploader.single("animeImage"), (req, res, next) => {
+  console.log("ANIMES POST ROUTE HERE!!");
+
+  AnimeModel.create({
+    name: req.body.name,
+    category: req.body.category,
+    animeUrl: req.body.animeUrl,
+    description: req.body.description,
+    animeImage: req.file.path,
+  })
     .then((response) => {
-      res.json(response);
+      //res.json({ animeImageUrl: req.file.path });
+      res.json({ animeImage: req.file.path });
     })
     .catch((e) => {
       console.log(e);
@@ -53,20 +59,30 @@ router.get("/episodes/:episodeId", (req, res, next) => {
   console.log("this is : ROUTE GET /:episodeId");
 });
 
-router.post("/episodes", (req, res, next) => {
-  console.log("REQ.BODY : ", req.body);
-  console.log("REQ.FILE : ", req.file);
-  console.log("REQ.FILESSS : ", req.files);
+router.post(
+  "/episodes",
+  fileUploader.single("episodeImage"),
+  (req, res, next) => {
+    console.log("REQ.BODY : ", req.body);
+    console.log("REQ.FILE : ", req.file);
+    console.log("REQ.FILESSS : ", req.files);
 
-  EpisodeModel.create(req.body)
-    .then((response) => {
-      //res.json({ animeImageUrl: req.file.path });
-      res.json(response);
+    EpisodeModel.create({
+      name: req.body.name,
+      number: req.body.number,
+      isPremium: req.body.isPremium,
+      episodeUrl: req.body.episodeUrl,
+      episodeImg: req.file.path,
     })
-    .catch((e) => {
-      console.log(e);
-    });
-});
+      .then((response) => {
+        //res.json({ animeImageUrl: req.file.path });
+        res.json({ episodeImageUrl: req.file.path });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+);
 
 router.put("episodes/:episodeId", (req, res, next) => {
   console.log("this is EDIT: ROUTE PUT /:episodeId");

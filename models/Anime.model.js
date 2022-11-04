@@ -4,28 +4,29 @@ const animeSchema = new Schema(
   {
     name: {
       type: String,
-      required: true,
+
       unique: true,
-      
     },
     category: {
       type: String,
-      enum : ["Shonen", "Drama", "Action"]
-        
+      enum: ["Shonen", "Drama", "Action"],
     },
-    
+
     animeUrl: {
       type: String,
-     
     },
     description: {
       type: String,
-      default: "Serie Anime"
+      default: "Serie Anime",
+    },
+    animeImage: {
+      type: String,
+      default: "https://www3.animeflv.net/uploads/animes/thumbs/3707.jpg",
     },
     episodes: [{ type: Schema.Types.ObjectId, ref: "Episode" }],
     followedUsers: [{ type: Schema.Types.ObjectId, ref: "User" }],
   },
-  
+
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
     timestamps: true,
