@@ -16,10 +16,8 @@ multer({
 });
 
 router.get("/animes", (req, res, next) => {
-  console.log("GET IN /ANIMES ");
   AnimeModel.find()
     .then((animesFromDB) => {
-      //console.log("FIND WORKS", animesFromDB);
       res.status(200).json(animesFromDB);
     })
     .catch((error) => {
@@ -29,10 +27,6 @@ router.get("/animes", (req, res, next) => {
 });
 router.get("/animes/searchvalue", (req, res, next) => {
   console.log("SearchValue", req.params);
-});
-
-router.get("/animes/:animeId", (req, res, next) => {
-  console.log("PRUEBA RUTA GET ANIMES");
 });
 
 router.post("/animes", fileUploader.single("animeImage"), (req, res, next) => {
@@ -53,9 +47,14 @@ router.post("/animes", fileUploader.single("animeImage"), (req, res, next) => {
       console.log(e);
     });
 });
+
+router.get("/animes/:animeId", (req, res, next) => {
+  console.log("GET ONE CONCRETE ANIME, REQ BODY : ", req.body);
+});
 router.put("animes/:animeId", (req, res, next) => {
   console.log("this is EDIT: ROUTE PUT /:animeId");
 });
+
 router.delete("animes/:animeId", (req, res, next) => {
   console.log("this is DELETe : ROUTE DEL /:animeId");
 });
@@ -76,10 +75,6 @@ router.post(
   "/episodes",
   fileUploader.single("episodeImage"),
   (req, res, next) => {
-    console.log("REQ.BODY : ", req.body);
-    console.log("REQ.FILE : ", req.file);
-    console.log("REQ.FILESSS : ", req.files);
-
     EpisodeModel.create({
       name: req.body.name,
       number: req.body.number,
