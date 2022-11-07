@@ -32,8 +32,9 @@ const userSchema = new Schema(
       type: Boolean,
       default: false
     },
-    likedEpisodes: [{ type: Schema.Types.ObjectId, ref: "Episode" }],
-    followedAnime: [{ type: Schema.Types.ObjectId, ref: "Anime" }],
+    likedEpisodesId: [{ type: Schema.Types.ObjectId, ref: "Episode" }],
+    followedAnimeId: [{ type: Schema.Types.ObjectId, ref: "Anime" }],
+    uploadedEpisodesId: [{ type: Schema.Types.ObjectId, ref: "Episode" }],
   },
   
   {
