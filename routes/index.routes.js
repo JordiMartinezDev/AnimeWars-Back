@@ -16,7 +16,6 @@ multer({
 });
 
 router.get("/animes", (req, res, next) => {
-  console.log("THIS IS BACK" + "/" + " ROUTE'S RESPONSE");
   AnimeModel.find()
     .then((animesFromDB) => {
       console.log("Retrieved animes from DB:", animesFromDB);
@@ -31,7 +30,6 @@ router.get("/animes", (req, res, next) => {
 router.get("/animes/:animeId", (req, res, next) => {});
 
 router.post("/animes", fileUploader.single("animeImage"), (req, res, next) => {
-  console.log("ANIMES POST ROUTE HERE!!");
 
   AnimeModel.create({
     name: req.body.name,
@@ -49,10 +47,8 @@ router.post("/animes", fileUploader.single("animeImage"), (req, res, next) => {
     });
 });
 router.put("animes/:animeId", (req, res, next) => {
-  console.log("this is EDIT: ROUTE PUT /:animeId");
 });
 router.delete("animes/:animeId", (req, res, next) => {
-  console.log("this is DELETe : ROUTE DEL /:animeId");
 });
 
 // ------- Episodes
@@ -71,9 +67,7 @@ router.post(
   "/episodes",
   fileUploader.single("episodeImage"),
   (req, res, next) => {
-    console.log("REQ.BODY : ", req.body);
-    console.log("REQ.FILE : ", req.file);
-    console.log("REQ.FILESSS : ", req.files);
+    console.log("episodiii : ", req.body)
 
     EpisodeModel.create({
       name: req.body.name,
@@ -81,6 +75,7 @@ router.post(
       isPremium: req.body.isPremium,
       episodeUrl: req.body.episodeUrl,
       episodeImg: req.file.path,
+
     })
       .then((response) => {
         //res.json({ animeImageUrl: req.file.path });

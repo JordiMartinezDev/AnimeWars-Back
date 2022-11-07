@@ -2,7 +2,7 @@ const { Schema, model } = require("mongoose");
 // TODO: Please make sure you edit the User model to whatever makes sense in this case
 const episodeSchema = new Schema(
   {
-    name: {
+    anime: {
       type: String,
     },
     number: {
@@ -21,9 +21,14 @@ const episodeSchema = new Schema(
     episodeUrl: {
       type: String,
     },
+    views: {
+      type: Number,
+    },
 
-    animeTitle: { type: Schema.Types.ObjectId, ref: "Anime" }, //Si vols treure el nom del anime fes servir populate.
-    likeUsers: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    animeId: { type: Schema.Types.ObjectId, ref: "Anime" }, //Si vols treure el nom del anime fes servir populate.
+    likeByUsersId: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    uploadedByUserId: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    
   },
 
   {
