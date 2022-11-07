@@ -16,19 +16,24 @@ multer({
 });
 
 router.get("/animes", (req, res, next) => {
-  console.log("THIS IS BACK" + "/" + " ROUTE'S RESPONSE");
+  console.log("GET IN /ANIMES ");
   AnimeModel.find()
     .then((animesFromDB) => {
-      console.log("Retrieved animes from DB:", animesFromDB);
+      //console.log("FIND WORKS", animesFromDB);
       res.status(200).json(animesFromDB);
     })
     .catch((error) => {
       console.log(error);
-      res.status(500).json({ message: "Error finding animes" });
+      // res.status(500).json({ message: "Error finding animes" });
     });
 });
+router.get("/animes/searchvalue", (req, res, next) => {
+  console.log("SearchValue", req.params);
+});
 
-router.get("/animes/:animeId", (req, res, next) => {});
+router.get("/animes/:animeId", (req, res, next) => {
+  console.log("PRUEBA RUTA GET ANIMES");
+});
 
 router.post("/animes", fileUploader.single("animeImage"), (req, res, next) => {
   console.log("ANIMES POST ROUTE HERE!!");
