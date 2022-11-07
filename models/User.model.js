@@ -26,16 +26,17 @@ const userSchema = new Schema(
     },
     isAdmin: {
       type: Boolean,
-      default: false
+      default: false,
     },
-    isPremium:{
+    isPremium: {
       type: Boolean,
-      default: false
+      default: false,
     },
     likedEpisodes: [{ type: Schema.Types.ObjectId, ref: "Episode" }],
     followedByAnimeId: [{ type: Schema.Types.ObjectId, ref: "Anime" }],
+    uploadedEpisodesId: [{ type: Schema.Types.ObjectId, ref: "Episode" }],
   },
-  
+
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
     timestamps: true,
@@ -43,5 +44,3 @@ const userSchema = new Schema(
 );
 const User = model("User", userSchema);
 module.exports = User;
-
-
