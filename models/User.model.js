@@ -33,7 +33,7 @@ const userSchema = new Schema(
       default: false
     },
     likedEpisodes: [{ type: Schema.Types.ObjectId, ref: "Episode" }],
-    followedAnime: [{ type: Schema.Types.ObjectId, ref: "Anime" }],
+    followedByAnimeId: [{ type: Schema.Types.ObjectId, ref: "Anime" }],
   },
   
   {
