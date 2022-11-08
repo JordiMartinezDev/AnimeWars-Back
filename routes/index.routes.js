@@ -19,11 +19,8 @@ router.get("/animes", (req, res, next) => {
   // res.send(200, { animes: []});
   AnimeModel.find()
     .then((animesFromDB) => {
-<<<<<<< HEAD
-=======
       // console.log("Retrieved animes from DB:", animesFromDB);
       // console.log("hasta aqui entra");
->>>>>>> Jusi99
       res.status(200).json(animesFromDB);
       // res.json(animesFromDB);
     })
