@@ -9,6 +9,7 @@ const EpisodeModel = require("../models/Episode.model");
 
 //CLOUDINARY
 const fileUploader = require("../config/cloudinary.config");
+const { populate } = require("../models/Anime.model");
 //CLOUDINARY
 multer({
   storage: multer.diskStorage({}),
@@ -19,11 +20,8 @@ router.get("/animes", (req, res, next) => {
   // res.send(200, { animes: []});
   AnimeModel.find()
     .then((animesFromDB) => {
-<<<<<<< HEAD
-=======
       // console.log("Retrieved animes from DB:", animesFromDB);
       // console.log("hasta aqui entra");
->>>>>>> Jusi99
       res.status(200).json(animesFromDB);
       // res.json(animesFromDB);
     })
@@ -38,6 +36,7 @@ router.get("/animes/:animeId", (req, res, next) => {
   const { animeId } = req.params;
   // console.log(animeId)
   AnimeModel.findById(animeId)
+    .populate("episodes")
     .then((animeFromDB) => {
       res.status(200).json(animeFromDB);
     })
@@ -115,7 +114,6 @@ router.post(
   "/episodes",
   fileUploader.single("episodeImage"),
   (req, res, next) => {
-    
     EpisodeModel.create({
       anime: req.body.anime,
       number: req.body.number,
@@ -123,10 +121,10 @@ router.post(
       episodeUrl: req.body.episodeUrl,
       episodeImg: req.file.path,
     })
-    .then((response) => {
-      console.log("req.boby cl: ",req.body)
-        console.log("response.data: ",response)
-       
+      .then((response) => {
+        console.log("req.boby cl: ", req.body);
+        console.log("response.data: ", response);
+
         //res.json({ animeImageUrl: req.file.path });
         res.json({ episodeImageUrl: req.file.path });
       })
