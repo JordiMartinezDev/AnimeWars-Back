@@ -4,6 +4,7 @@ const episodeSchema = new Schema(
   {
     anime: {
       type: String,
+      required:true
     },
     number: {
       type: Number,

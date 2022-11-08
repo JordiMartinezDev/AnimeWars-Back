@@ -19,8 +19,8 @@ router.get("/animes", (req, res, next) => {
   // res.send(200, { animes: []});
   AnimeModel.find()
     .then((animesFromDB) => {
-      console.log("Retrieved animes from DB:", animesFromDB);
-      console.log("hasta aqui entra");
+      // console.log("Retrieved animes from DB:", animesFromDB);
+      // console.log("hasta aqui entra");
       res.status(200).json(animesFromDB);
       // res.json(animesFromDB);
     })
@@ -117,14 +117,18 @@ router.post(
   "/episodes",
   fileUploader.single("episodeImage"),
   (req, res, next) => {
+    
     EpisodeModel.create({
-      name: req.body.name,
+      anime: req.body.anime,
       number: req.body.number,
       isPremium: req.body.isPremium,
       episodeUrl: req.body.episodeUrl,
       episodeImg: req.file.path,
     })
-      .then((response) => {
+    .then((response) => {
+      console.log("req.boby cl: ",req.body)
+        console.log("response.data: ",response)
+       
         //res.json({ animeImageUrl: req.file.path });
         res.json({ episodeImageUrl: req.file.path });
       })
