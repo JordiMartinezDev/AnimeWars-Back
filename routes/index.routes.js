@@ -19,8 +19,6 @@ router.get("/animes", (req, res, next) => {
   // res.send(200, { animes: []});
   AnimeModel.find()
     .then((animesFromDB) => {
-      console.log("Retrieved animes from DB:", animesFromDB);
-      console.log("hasta aqui entra");
       res.status(200).json(animesFromDB);
       // res.json(animesFromDB);
     })
@@ -30,13 +28,12 @@ router.get("/animes", (req, res, next) => {
     });
 });
 
-//funciona desde postman ok! ruta: http://localhost:3001/api/animes/cualquier id de la bd
 router.get("/animes/:animeId", (req, res, next) => {
+  console.log("BACK ANIMES/:ANIMEID ");
   const { animeId } = req.params;
   // console.log(animeId)
   AnimeModel.findById(animeId)
     .then((animeFromDB) => {
-      console.log("Retrieved anime from DB:", animeFromDB);
       res.status(200).json(animeFromDB);
     })
     .catch((error) => {
@@ -74,7 +71,6 @@ router.put("/animes/:animeId", (req, res, next) => {
     animeImage,
   })
     .then((response) => {
-      console.log("this is response", response);
       res.json({ message: "Anime updated" });
     })
     .catch((e) => {
@@ -86,11 +82,9 @@ router.delete("animes/:animeId", (req, res, next) => {});
 
 // ------- Episodes
 router.get("/episodes", (req, res, next) => {
-  console.log("THIS IS BACK, GET EPISODES FULL LIST");
   // res.json("All good in here");
   EpisodeModel.find()
     .then((episodesFromDB) => {
-      console.log("Retrieved episodes from DB:", episodesFromDB);
       res.status(200).json(episodesFromDB);
     })
     .catch((error) => {
@@ -104,7 +98,6 @@ router.get("/episodes/:episodeId", (req, res, next) => {
   const { episodeId } = req.params;
   EpisodeModel.findById(episodeId)
     .then((episodeFromDB) => {
-      console.log("Retrieved episode from DB:", episodeFromDB);
       res.status(200).json(episodeFromDB);
     })
     .catch((error) => {
@@ -134,12 +127,8 @@ router.post(
   }
 );
 
-router.put("episodes/:episodeId", (req, res, next) => {
-  console.log("this is EDIT: ROUTE PUT /:episodeId");
-});
-router.delete("episodes/:episodeId", (req, res, next) => {
-  console.log("this is DELETe : ROUTE DEL /:episodeId");
-});
+router.put("episodes/:episodeId", (req, res, next) => {});
+router.delete("episodes/:episodeId", (req, res, next) => {});
 
 // router.post("/uploadVideo/:userId", (req, res, next) => {
 //   Episode.create({
