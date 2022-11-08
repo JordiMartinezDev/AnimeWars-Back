@@ -9,6 +9,7 @@ const EpisodeModel = require("../models/Episode.model");
 
 //CLOUDINARY
 const fileUploader = require("../config/cloudinary.config");
+const { populate } = require("../models/Anime.model");
 //CLOUDINARY
 multer({
   storage: multer.diskStorage({}),
@@ -35,6 +36,7 @@ router.get("/animes/:animeId", (req, res, next) => {
   const { animeId } = req.params;
   // console.log(animeId)
   AnimeModel.findById(animeId)
+    .populate("episodes")
     .then((animeFromDB) => {
       res.status(200).json(animeFromDB);
     })
