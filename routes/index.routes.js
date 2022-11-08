@@ -19,11 +19,8 @@ router.get("/animes", (req, res, next) => {
   // res.send(200, { animes: []});
   AnimeModel.find()
     .then((animesFromDB) => {
-<<<<<<< HEAD
-=======
       // console.log("Retrieved animes from DB:", animesFromDB);
       // console.log("hasta aqui entra");
->>>>>>> Jusi99
       res.status(200).json(animesFromDB);
       // res.json(animesFromDB);
     })
@@ -71,9 +68,10 @@ router.put("/animes/:animeId", (req, res, next) => {
   AnimeModel.findByIdAndUpdate(animeId, {
     name,
     category,
-    animeUrl,
     description,
     animeImage,
+    episodes,
+    followedUsers,
   })
     .then((response) => {
       res.json({ message: "Anime updated" });
@@ -81,6 +79,15 @@ router.put("/animes/:animeId", (req, res, next) => {
     .catch((e) => {
       console.log(e);
     });
+
+  //-----
+  // Apartment.findByIdAndUpdate(req.params.idApartment, req.body)
+  // .then(results => {
+  //   res.json(results);
+  // })
+  // .catch(err => {
+  //   next(err);
+  // })
 });
 
 router.delete("animes/:animeId", (req, res, next) => {});
@@ -115,7 +122,6 @@ router.post(
   "/episodes",
   fileUploader.single("episodeImage"),
   (req, res, next) => {
-    
     EpisodeModel.create({
       anime: req.body.anime,
       number: req.body.number,
@@ -123,10 +129,10 @@ router.post(
       episodeUrl: req.body.episodeUrl,
       episodeImg: req.file.path,
     })
-    .then((response) => {
-      console.log("req.boby cl: ",req.body)
-        console.log("response.data: ",response)
-       
+      .then((response) => {
+        console.log("req.boby cl: ", req.body);
+        console.log("response.data: ", response);
+
         //res.json({ animeImageUrl: req.file.path });
         res.json({ episodeImageUrl: req.file.path });
       })
