@@ -6,6 +6,7 @@ const multer = require("multer");
 //REQ MODELS
 const AnimeModel = require("../models/Anime.model");
 const EpisodeModel = require("../models/Episode.model");
+const UserModel = require("../models/User.model");
 
 //CLOUDINARY
 const fileUploader = require("../config/cloudinary.config");
@@ -32,7 +33,6 @@ router.get("/animes", (req, res, next) => {
 });
 
 router.get("/animes/:animeId", (req, res, next) => {
-  console.log("BACK ANIMES/:ANIMEID ");
   const { animeId } = req.params;
   // console.log(animeId)
   AnimeModel.findById(animeId)
@@ -63,18 +63,40 @@ router.post("/animes", fileUploader.single("animeImage"), (req, res, next) => {
       console.log(e);
     });
 });
+router.put("/animes/followanime/:animeId", (req, res, next) => {
+  const { animeId } = req.params;
 
+  AnimeModel.findById(animeId)
+    .then((animeFromDb) => {
+      animeFromDb.followedUsers.push(req.body.user);
+      animeFromDb.save();
+      res.json({ message: "Anime updated" });
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+
+  UserModel.findById(req.body.user)
+    .then((user) => {
+      console.log("Pushing " + animeId + " to user:" + user);
+      user.followedByAnimeId.push(animeId);
+      user.save();
+      res.json({ message: "User updated correctly" });
+    })
+    .catch((e) => console.log(e));
+});
 //funciona el PUT desde postman ok! ruta: http://localhost:3001/api/animes/cualquier id de la bd
 router.put("/animes/:animeId", (req, res, next) => {
   const { animeId } = req.params;
-  const { name, category, animeUrl, description, animeImage } = req.body;
-  AnimeModel.findByIdAndUpdate(animeId, {
-    name,
-    category,
-    animeUrl,
-    description,
-    animeImage,
-  })
+
+  console.log("PUT IN BACK FROM ANIMES/:ANIMEID : OBJECT: ", followedUsers);
+  console.log("REQ.BODY IN BACK : ", req.body);
+  AnimeModel.findById(animeId)
+    .then((animeFromDb) => {
+      animeFromDb.followedUsers.push(followedUsers);
+      animeFromDb.save();
+    })
+
     .then((response) => {
       //console.log("this is response", response);
       res.json({ message: "Anime updated" });
@@ -106,7 +128,7 @@ router.get("/episodes/:episodeId", (req, res, next) => {
   const { episodeId } = req.params;
   EpisodeModel.findById(episodeId)
     .then((episodeFromDB) => {
-     // console.log("Retrieved episode from DB:", episodeFromDB);
+      // console.log("Retrieved episode from DB:", episodeFromDB);
       res.status(200).json(episodeFromDB);
     })
     .catch((error) => {
@@ -139,11 +161,10 @@ router.post(
   }
 );
 
-router.put("episodes/:episodeId", (req, res, next) => {
- // console.log("this is EDIT: ROUTE PUT /:episodeId");
-});
-router.delete("episodes/:episodeId", (req, res, next) => {
- // console.log("this is DELETe : ROUTE DEL /:episodeId");
+router.put("episodes/:episodeId", (req, res, next) => {});
+router.delete("episodes/:episodeId", (req, res, next) => {});
+router.post("episodes/:episodeId", (req, res, next) => {
+  console.log("Try to post COMMENT in BACK Route ");
 });
 
 // router.post("/uploadVideo/:userId", (req, res, next) => {
@@ -173,6 +194,16 @@ router.post("/uploadVideo/:userId", (req, res, next) => {
       { $push: { episodes: episode._id } },
       { new: true }
     );
+  });
+
+  router.get("/user", (req, res, next) => {
+    if (!user) {
+      console.log(" ERROR ---> USER IS NOt loGGeD OR NULL USER");
+    }
+    User.findById(user._id).then((result) => {
+      console.log();
+      res.json(result);
+    });
   });
 });
 
