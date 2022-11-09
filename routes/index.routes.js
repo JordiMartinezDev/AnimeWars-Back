@@ -6,9 +6,11 @@ const multer = require("multer");
 //REQ MODELS
 const AnimeModel = require("../models/Anime.model");
 const EpisodeModel = require("../models/Episode.model");
+const UserModel = require("../models/User.model");
 
 //CLOUDINARY
 const fileUploader = require("../config/cloudinary.config");
+const { populate } = require("../models/Anime.model");
 //CLOUDINARY
 multer({
   storage: multer.diskStorage({}),
@@ -31,11 +33,12 @@ router.get("/animes", (req, res, next) => {
 });
 
 router.get("/animes/:animeId", (req, res, next) => {
-  console.log("BACK ANIMES/:ANIMEID ");
   const { animeId } = req.params;
   // console.log(animeId)
-  AnimeModel.findById(animeId).populate("episodes")
+  AnimeModel.findById(animeId)
+    .populate("episodes")
     .then((animeFromDB) => {
+      // console.log("Retrieved anime from DB:", animeFromDB);
       res.status(200).json(animeFromDB);
     })
     .catch((error) => {
@@ -60,19 +63,42 @@ router.post("/animes", fileUploader.single("animeImage"), (req, res, next) => {
       console.log(e);
     });
 });
+router.put("/animes/followanime/:animeId", (req, res, next) => {
+  const { animeId } = req.params;
 
+  AnimeModel.findById(animeId)
+    .then((animeFromDb) => {
+      animeFromDb.followedUsers.push(req.body.user);
+      animeFromDb.save();
+      res.json({ message: "Anime updated" });
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+
+  UserModel.findById(req.body.user)
+    .then((user) => {
+      console.log("Pushing " + animeId + " to user:" + user);
+      user.followedByAnimeId.push(animeId);
+      user.save();
+      res.json({ message: "User updated correctly" });
+    })
+    .catch((e) => console.log(e));
+});
 //funciona el PUT desde postman ok! ruta: http://localhost:3001/api/animes/cualquier id de la bd
 router.put("/animes/:animeId", (req, res, next) => {
   const { animeId } = req.params;
-  const { name, category, animeUrl, description, animeImage } = req.body;
-  AnimeModel.findByIdAndUpdate(animeId, {
-    name,
-    category,
-    animeUrl,
-    description,
-    animeImage,
-  })
+
+  console.log("PUT IN BACK FROM ANIMES/:ANIMEID : OBJECT: ", followedUsers);
+  console.log("REQ.BODY IN BACK : ", req.body);
+  AnimeModel.findById(animeId)
+    .then((animeFromDb) => {
+      animeFromDb.followedUsers.push(followedUsers);
+      animeFromDb.save();
+    })
+
     .then((response) => {
+      //console.log("this is response", response);
       res.json({ message: "Anime updated" });
     })
     .catch((e) => {
@@ -84,9 +110,11 @@ router.delete("animes/:animeId", (req, res, next) => {});
 
 // ------- Episodes
 router.get("/episodes", (req, res, next) => {
+  //console.log("THIS IS BACK, GET EPISODES FULL LIST");
   // res.json("All good in here");
   EpisodeModel.find()
     .then((episodesFromDB) => {
+      //console.log("Retrieved episodes from DB:", episodesFromDB);
       res.status(200).json(episodesFromDB);
     })
     .catch((error) => {
@@ -96,10 +124,11 @@ router.get("/episodes", (req, res, next) => {
 });
 
 router.get("/episodes/:episodeId", (req, res, next) => {
-  console.log("this is : ROUTE GET /:episodeId");
+  //console.log("this is : ROUTE GET /:episodeId");
   const { episodeId } = req.params;
   EpisodeModel.findById(episodeId)
     .then((episodeFromDB) => {
+      // console.log("Retrieved episode from DB:", episodeFromDB);
       res.status(200).json(episodeFromDB);
     })
     .catch((error) => {
@@ -112,7 +141,6 @@ router.post(
   "/episodes",
   fileUploader.single("episodeImage"),
   (req, res, next) => {
-    
     EpisodeModel.create({
       anime: req.body.anime,
       number: req.body.number,
@@ -120,10 +148,10 @@ router.post(
       episodeUrl: req.body.episodeUrl,
       episodeImg: req.file.path,
     })
-    .then((response) => {
-      console.log("req.boby cl: ",req.body)
-        console.log("response.data: ",response)
-       
+      .then((response) => {
+        console.log("req.boby cl: ", req.body);
+        console.log("response.data: ", response);
+
         //res.json({ animeImageUrl: req.file.path });
         res.json({ episodeImageUrl: req.file.path });
       })
@@ -135,6 +163,9 @@ router.post(
 
 router.put("episodes/:episodeId", (req, res, next) => {});
 router.delete("episodes/:episodeId", (req, res, next) => {});
+router.post("episodes/:episodeId", (req, res, next) => {
+  console.log("Try to post COMMENT in BACK Route ");
+});
 
 // router.post("/uploadVideo/:userId", (req, res, next) => {
 //   Episode.create({
@@ -164,12 +195,21 @@ router.post("/uploadVideo/:userId", (req, res, next) => {
       { new: true }
     );
   });
-  
+
+  router.get("/user", (req, res, next) => {
+    if (!user) {
+      console.log(" ERROR ---> USER IS NOt loGGeD OR NULL USER");
+    }
+    User.findById(user._id).then((result) => {
+      console.log();
+      res.json(result);
+    });
+  });
 });
 
 router.put("/profile/edit/:profileId",(req, res, next)=>{
-  const {username, profileImg, backgroundImg} = req.body
-  req.currentUser.username=req.body.username
+  const {username} = req.body
+  req.currentUser.username= username
   req.currentUser.profileImg = req.file.profileImg
   req.currentUser.profileImg = req.file.backgroundImg
 

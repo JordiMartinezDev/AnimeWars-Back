@@ -4,7 +4,7 @@ const episodeSchema = new Schema(
   {
     anime: {
       type: String,
-      required:true
+      required: true,
     },
     number: {
       type: Number,
@@ -25,11 +25,10 @@ const episodeSchema = new Schema(
     views: {
       type: Number,
     },
-
     animeId: { type: Schema.Types.ObjectId, ref: "Anime" }, //Si vols treure el nom del anime fes servir populate.
     likeByUsersId: [{ type: Schema.Types.ObjectId, ref: "User" }],
     uploadedByUserId: [{ type: Schema.Types.ObjectId, ref: "User" }],
-    
+    commentId: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
   },
 
   {

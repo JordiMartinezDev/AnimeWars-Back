@@ -12,7 +12,9 @@ const animeSchema = new Schema(
       enum: ["Shonen", "Drama", "Action"],
     },
 
-    
+    animeUrl: {
+      type: String,
+    },
     description: {
       type: String,
       default: "Serie Anime",
