@@ -19,16 +19,8 @@ router.get("/animes", (req, res, next) => {
   // res.send(200, { animes: []});
   AnimeModel.find()
     .then((animesFromDB) => {
-<<<<<<< HEAD
       // console.log("Retrieved animes from DB:", animesFromDB);
       // console.log("hasta aqui entra");
-=======
-<<<<<<< HEAD
-=======
-      // console.log("Retrieved animes from DB:", animesFromDB);
-      // console.log("hasta aqui entra");
->>>>>>> Jusi99
->>>>>>> dev
       res.status(200).json(animesFromDB);
       // res.json(animesFromDB);
     })
@@ -45,10 +37,7 @@ router.get("/animes/:animeId", (req, res, next) => {
   AnimeModel.findById(animeId)
     .populate("episodes")
     .then((animeFromDB) => {
-<<<<<<< HEAD
       // console.log("Retrieved anime from DB:", animeFromDB);
-=======
->>>>>>> dev
       res.status(200).json(animeFromDB);
     })
     .catch((error) => {
@@ -86,10 +75,7 @@ router.put("/animes/:animeId", (req, res, next) => {
     animeImage,
   })
     .then((response) => {
-<<<<<<< HEAD
       //console.log("this is response", response);
-=======
->>>>>>> dev
       res.json({ message: "Anime updated" });
     })
     .catch((e) => {
@@ -101,17 +87,11 @@ router.delete("animes/:animeId", (req, res, next) => {});
 
 // ------- Episodes
 router.get("/episodes", (req, res, next) => {
-<<<<<<< HEAD
   //console.log("THIS IS BACK, GET EPISODES FULL LIST");
   // res.json("All good in here");
   EpisodeModel.find()
     .then((episodesFromDB) => {
       //console.log("Retrieved episodes from DB:", episodesFromDB);
-=======
-  // res.json("All good in here");
-  EpisodeModel.find()
-    .then((episodesFromDB) => {
->>>>>>> dev
       res.status(200).json(episodesFromDB);
     })
     .catch((error) => {
@@ -125,10 +105,7 @@ router.get("/episodes/:episodeId", (req, res, next) => {
   const { episodeId } = req.params;
   EpisodeModel.findById(episodeId)
     .then((episodeFromDB) => {
-<<<<<<< HEAD
      // console.log("Retrieved episode from DB:", episodeFromDB);
-=======
->>>>>>> dev
       res.status(200).json(episodeFromDB);
     })
     .catch((error) => {
@@ -162,17 +139,12 @@ router.post(
   }
 );
 
-<<<<<<< HEAD
 router.put("episodes/:episodeId", (req, res, next) => {
  // console.log("this is EDIT: ROUTE PUT /:episodeId");
 });
 router.delete("episodes/:episodeId", (req, res, next) => {
  // console.log("this is DELETe : ROUTE DEL /:episodeId");
 });
-=======
-router.put("episodes/:episodeId", (req, res, next) => {});
-router.delete("episodes/:episodeId", (req, res, next) => {});
->>>>>>> dev
 
 // router.post("/uploadVideo/:userId", (req, res, next) => {
 //   Episode.create({
