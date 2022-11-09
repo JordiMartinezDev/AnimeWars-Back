@@ -34,7 +34,7 @@ router.get("/animes/:animeId", (req, res, next) => {
   console.log("BACK ANIMES/:ANIMEID ");
   const { animeId } = req.params;
   // console.log(animeId)
-  AnimeModel.findById(animeId)
+  AnimeModel.findById(animeId).populate("episodes")
     .then((animeFromDB) => {
       res.status(200).json(animeFromDB);
     })
@@ -107,7 +107,7 @@ router.get("/episodes/:episodeId", (req, res, next) => {
       res.status(500).json({ message: "Error finding episode" });
     });
 });
-
+//aa 
 router.post(
   "/episodes",
   fileUploader.single("episodeImage"),
@@ -164,6 +164,16 @@ router.post("/uploadVideo/:userId", (req, res, next) => {
       { new: true }
     );
   });
+  
 });
+
+router.put("/profile/edit/:profileId",(req, res, next)=>{
+  const {username, profileImg, backgroundImg} = req.body
+  req.currentUser.username=req.body.username
+  req.currentUser.profileImg = req.file.profileImg
+  req.currentUser.profileImg = req.file.backgroundImg
+
+})
+
 
 module.exports = router;
