@@ -141,17 +141,24 @@ router.post(
   "/episodes",
   fileUploader.single("episodeImage"),
   (req, res, next) => {
+    console.log("Added Episode from user:", req.body);
     EpisodeModel.create({
       anime: req.body.anime,
       number: req.body.number,
       isPremium: req.body.isPremium,
       episodeUrl: req.body.episodeUrl,
       episodeImg: req.file.path,
+      uploadedByUserId: req.body.userId,
+      // animeId: req.body.animeId,
     })
       .then((response) => {
         console.log("req.boby cl: ", req.body);
         console.log("response.data: ", response);
-
+        AnimeModel.findById(req.body.animeId)
+          .then((anime) => {
+            anime.episodes.push(response._id);
+          })
+          .catch((e) => console.log(e));
         //res.json({ animeImageUrl: req.file.path });
         res.json({ episodeImageUrl: req.file.path });
       })
