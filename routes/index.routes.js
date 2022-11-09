@@ -32,7 +32,6 @@ router.get("/animes", (req, res, next) => {
 });
 
 router.get("/animes/:animeId", (req, res, next) => {
-  console.log("BACK ANIMES/:ANIMEID ");
   const { animeId } = req.params;
   // console.log(animeId)
   AnimeModel.findById(animeId)
@@ -62,34 +61,42 @@ router.post("/animes", fileUploader.single("animeImage"), (req, res, next) => {
       console.log(e);
     });
 });
+router.put("/animes/followanime/:animeId", (req, res, next) => {
+  const { animeId } = req.params;
 
+  console.log("REQ.BODY.Userid IN BACK : ", req.body);
+
+  // AnimeModel.findById(animeId)
+  //   .then((animeFromDb) => {
+  //     animeFromDb.followedUsers.push(req.body.userId);
+  //     animeFromDb.save();
+  //   })
+
+  //   .then((response) => {
+  //     res.json({ message: "Anime updated" });
+  //   })
+  //   .catch((e) => {
+  //     console.log(e);
+  //   });
+});
 //funciona el PUT desde postman ok! ruta: http://localhost:3001/api/animes/cualquier id de la bd
 router.put("/animes/:animeId", (req, res, next) => {
   const { animeId } = req.params;
-  const { name, category, animeUrl, description, animeImage } = req.body;
-  AnimeModel.findByIdAndUpdate(animeId, {
-    name,
-    category,
-    description,
-    animeImage,
-    episodes,
-    followedUsers,
-  })
+
+  console.log("PUT IN BACK FROM ANIMES/:ANIMEID : OBJECT: ", followedUsers);
+  console.log("REQ.BODY IN BACK : ", req.body);
+  AnimeModel.findById(animeId)
+    .then((animeFromDb) => {
+      animeFromDb.followedUsers.push(followedUsers);
+      animeFromDb.save();
+    })
+
     .then((response) => {
       res.json({ message: "Anime updated" });
     })
     .catch((e) => {
       console.log(e);
     });
-
-  //-----
-  // Apartment.findByIdAndUpdate(req.params.idApartment, req.body)
-  // .then(results => {
-  //   res.json(results);
-  // })
-  // .catch(err => {
-  //   next(err);
-  // })
 });
 
 router.delete("animes/:animeId", (req, res, next) => {});
@@ -174,6 +181,16 @@ router.post("/uploadVideo/:userId", (req, res, next) => {
       { $push: { episodes: episode._id } },
       { new: true }
     );
+  });
+
+  router.get("/user", (req, res, next) => {
+    if (!user) {
+      console.log(" ERROR ---> USER IS NOt loGGeD OR NULL USER");
+    }
+    User.findById(user._id).then((result) => {
+      console.log();
+      res.json(result);
+    });
   });
 });
 
