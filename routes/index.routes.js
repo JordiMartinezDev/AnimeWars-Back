@@ -6,6 +6,7 @@ const multer = require("multer");
 //REQ MODELS
 const AnimeModel = require("../models/Anime.model");
 const EpisodeModel = require("../models/Episode.model");
+const UserModel = require("../models/User.model");
 
 //CLOUDINARY
 const fileUploader = require("../config/cloudinary.config");
@@ -64,20 +65,24 @@ router.post("/animes", fileUploader.single("animeImage"), (req, res, next) => {
 router.put("/animes/followanime/:animeId", (req, res, next) => {
   const { animeId } = req.params;
 
-  console.log("REQ.BODY.Userid IN BACK : ", req.body);
+  AnimeModel.findById(animeId)
+    .then((animeFromDb) => {
+      animeFromDb.followedUsers.push(req.body.user);
+      animeFromDb.save();
+      res.json({ message: "Anime updated" });
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 
-  // AnimeModel.findById(animeId)
-  //   .then((animeFromDb) => {
-  //     animeFromDb.followedUsers.push(req.body.userId);
-  //     animeFromDb.save();
-  //   })
-
-  //   .then((response) => {
-  //     res.json({ message: "Anime updated" });
-  //   })
-  //   .catch((e) => {
-  //     console.log(e);
-  //   });
+  UserModel.findById(req.body.user)
+    .then((user) => {
+      console.log("Pushing " + animeId + " to user:" + user);
+      user.followedByAnimeId.push(animeId);
+      user.save();
+      res.json({ message: "User updated correctly" });
+    })
+    .catch((e) => console.log(e));
 });
 //funciona el PUT desde postman ok! ruta: http://localhost:3001/api/animes/cualquier id de la bd
 router.put("/animes/:animeId", (req, res, next) => {
@@ -153,6 +158,9 @@ router.post(
 
 router.put("episodes/:episodeId", (req, res, next) => {});
 router.delete("episodes/:episodeId", (req, res, next) => {});
+router.post("episodes/:episodeId", (req, res, next) => {
+  console.log("Try to post COMMENT in BACK Route ");
+});
 
 // router.post("/uploadVideo/:userId", (req, res, next) => {
 //   Episode.create({

@@ -24,6 +24,10 @@ const userSchema = new Schema(
       type: String,
       default: "/images/profileuser.png",
     },
+    backgroundImage: {
+      type: String,
+      default: "/images/profileuser.png",
+    },
     isAdmin: {
       type: Boolean,
       default: false,
