@@ -237,6 +237,7 @@ router.post("/uploadVideo/:userId", (req, res, next) => {
   });
 });
 
+
 router.put("/user", (req, res, next) => {
   console.log("USER._ID FROM THE BACK?", req.body._id);
 
@@ -262,10 +263,41 @@ router.put("/profile/edit/:profileId", fileUploader.single("profileImg"),(req, r
    
    .then(results=>{
      console.log("results desde el back edit profile: ",results)
+     res.json(results)
    })
+   .catch(err=>{
+    next(err)
+   })
+
+   
    
 
 })
+//////// iep
+router.get("/profile/:userId", (req,res, next)=>{
+  const {userId}=req.params
+  User.findById(userId)
+  .then(results=>{
+    console.log("results desde el back profile page: ",results)
+    res.json(results)
+  })
+  .catch(err=>{
+   next("ha fallat el then de finById",err)
+  })
+})
+
+router.get("/usuaris", (req,res,next)=>{
+  User.find()
+  .then (results=>{
+    res.json(results)
+  })
+  .catch(err=>{
+    next("ha fallat el then de lastoption",err)
+  })
+})
+
+//router.get("/users")
+//pensa com si elperametre de ruta fos una "x" en una equacio de mates
 
 
 module.exports = router;
