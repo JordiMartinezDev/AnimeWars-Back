@@ -11,6 +11,7 @@ const UserModel = require("../models/User.model");
 //CLOUDINARY
 const fileUploader = require("../config/cloudinary.config");
 const { populate } = require("../models/Anime.model");
+const User = require("../models/User.model");
 //CLOUDINARY
 multer({
   storage: multer.diskStorage({}),
@@ -207,11 +208,25 @@ router.post("/uploadVideo/:userId", (req, res, next) => {
   });
 });
 
-router.put("/profile/edit/:profileId",(req, res, next)=>{
-  const {username} = req.body
-  req.currentUser.username= username
-  req.currentUser.profileImg = req.file.profileImg
-  req.currentUser.profileImg = req.file.backgroundImg
+router.put("/profile/edit/:profileId", fileUploader.single("profileImg"),(req, res, next)=>{
+  
+  const {username}=req.body
+  const profileUpdate ={
+    username,
+    profileImg :req.file.path
+    
+  }
+  console.log("Req. file desdeback: ", req.file)
+  console.log("req.body desdeBack: ", req.body)
+  console.log("req.body.username: ",req.body.userId)
+  console.log("profileUpdate: ",profileUpdate)
+  //el profileId es el parametre de ruta.
+  User.findByIdAndUpdate(req.body.userId, profileUpdate) 
+   
+   .then(results=>{
+     console.log("results desde el back edit profile: ",results)
+   })
+   
 
 })
 
