@@ -190,7 +190,17 @@ router.post(
 );
 
 router.put("/episodes/:episodeId", (req, res, next) => {});
-router.delete("/episodes/:episodeId", (req, res, next) => {});
+
+router.delete("/episodes/:episodeId", (req, res, next) => {
+  const { episodeId } = req.params;
+  EpisodeModel.findByIdAndDelete(episodeId)
+    .then((response) => {
+      res.json({ message: "Episode deleted" });
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+});
 
 router.post("/episode/:episodeId", (req, res, next) => {
   console.log("Try to post COMMENT  SEE REQ BODy: ", req.body);
