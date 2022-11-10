@@ -134,6 +134,7 @@ router.get("/episodes/:episodeId", (req, res, next) => {
   const { episodeId } = req.params;
   EpisodeModel.findById(episodeId)
     .populate("commentId")
+    .populate({ path: "commentId", populate: "commentByUser" })
     .then((episodeFromDB) => {
       console.log("Episode Populated:", episodeFromDB);
       // console.log("Retrieved episode from DB:", episodeFromDB);
@@ -193,10 +194,8 @@ router.post("/episode/:episodeId", (req, res, next) => {
   })
     .then((commentCreated) => {
       //-- Episodemodel
-      console.log("THIS COMMENT is crEATED IN DB : ", commentCreated);
       EpisodeModel.findById(req.body.episodeId)
         .then((episode) => {
-          console.log("Episode found", episode);
           episode.commentId.push(commentCreated._id);
           episode.save();
         })
