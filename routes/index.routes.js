@@ -213,12 +213,10 @@ router.post("/uploadVideo/:userId", (req, res, next) => {
   });
 });
 
-router.get("/user", (req, res, next) => {
-  console.log("USER FROM THE BACK?", req.body);
-  if (!req.body.user) {
-    console.log(" ERROR ---> USER IS NOt loGGeD OR NULL USER");
-  }
-  UserModel.findById(req.body.user._id).then((result) => {
+router.put("/user", (req, res, next) => {
+  console.log("USER._ID FROM THE BACK?", req.body._id);
+
+  UserModel.findById(req.body._id).then((result) => {
     res.json(result);
   });
 });
