@@ -9,7 +9,7 @@ const animeSchema = new Schema(
     },
     category: {
       type: String,
-      enum: ["Shonen", "Drama", "Action"],
+      enum: ["Shonen", "Drama", "Action","Adventure","Mystery","Romance"],
     },
 
     animeUrl: {
