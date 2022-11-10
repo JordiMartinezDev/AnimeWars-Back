@@ -7,6 +7,7 @@ const multer = require("multer");
 const AnimeModel = require("../models/Anime.model");
 const EpisodeModel = require("../models/Episode.model");
 const UserModel = require("../models/User.model");
+const CommentModel = require("../models/Comment.model");
 
 //CLOUDINARY
 const fileUploader = require("../config/cloudinary.config");
@@ -17,6 +18,7 @@ multer({
   storage: multer.diskStorage({}),
   limits: { fileSize: 500000 },
 });
+
 //funciona desde postman ok! ruta: http://localhost:3001/api/animes
 router.get("/animes", (req, res, next) => {
   // res.send(200, { animes: []});
@@ -66,23 +68,27 @@ router.post("/animes", fileUploader.single("animeImage"), (req, res, next) => {
 });
 router.put("/animes/followanime/:animeId", (req, res, next) => {
   const { animeId } = req.params;
-
-  AnimeModel.findById(animeId)
-    .then((animeFromDb) => {
-      animeFromDb.followedUsers.push(req.body.user);
-      animeFromDb.save();
-      res.json({ message: "Anime updated" });
-    })
-    .catch((e) => {
-      console.log(e);
-    });
+  let followed = false;
 
   UserModel.findById(req.body.user)
     .then((user) => {
-      console.log("Pushing " + animeId + " to user:" + user);
-      user.followedByAnimeId.push(animeId);
+      user.followedByAnimeId.map((animeIdFollowed) => {
+        if (animeIdFollowed == animeId) followed = true;
+      });
+
+      if (!followed) user.followedByAnimeId.push(animeId);
+      else user.followedByAnimeId.remove(animeId);
       user.save();
       res.json({ message: "User updated correctly" });
+      AnimeModel.findById(animeId)
+        .then((animeFromDb) => {
+          if (!followed) animeFromDb.followedUsers.push(req.body.user);
+          else animeFromDb.followedUsers.remove(req.body.user);
+          animeFromDb.save();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     })
     .catch((e) => console.log(e));
 });
@@ -128,7 +134,10 @@ router.get("/episodes/:episodeId", (req, res, next) => {
   //console.log("this is : ROUTE GET /:episodeId");
   const { episodeId } = req.params;
   EpisodeModel.findById(episodeId)
+    .populate("commentId")
+    .populate({ path: "commentId", populate: "commentByUser" })
     .then((episodeFromDB) => {
+      console.log("Episode Populated:", episodeFromDB);
       // console.log("Retrieved episode from DB:", episodeFromDB);
       res.status(200).json(episodeFromDB);
     })
@@ -142,17 +151,28 @@ router.post(
   "/episodes",
   fileUploader.single("episodeImage"),
   (req, res, next) => {
+    console.log("Added Episode from user:", req.body);
     EpisodeModel.create({
       anime: req.body.anime,
       number: req.body.number,
       isPremium: req.body.isPremium,
       episodeUrl: req.body.episodeUrl,
       episodeImg: req.file.path,
+      uploadedByUserId: req.body.userId,
+      // animeId: req.body.animeId,
     })
       .then((response) => {
         console.log("req.boby cl: ", req.body);
         console.log("response.data: ", response);
+        AnimeModel.findOne;
+        AnimeModel.findOne({ name: req.body.anime })
+          .then((anime) => {
+            console.log("ANIME FOUND IN DB: ", anime);
+            anime.episodes.push(response._id);
+            anime.save();
+          })
 
+          .catch((e) => console.log(e));
         //res.json({ animeImageUrl: req.file.path });
         res.json({ episodeImageUrl: req.file.path });
       })
@@ -162,10 +182,29 @@ router.post(
   }
 );
 
-router.put("episodes/:episodeId", (req, res, next) => {});
-router.delete("episodes/:episodeId", (req, res, next) => {});
-router.post("episodes/:episodeId", (req, res, next) => {
-  console.log("Try to post COMMENT in BACK Route ");
+router.put("/episodes/:episodeId", (req, res, next) => {});
+router.delete("/episodes/:episodeId", (req, res, next) => {});
+
+router.post("/episode/:episodeId", (req, res, next) => {
+  console.log("Try to post COMMENT  SEE REQ BODy: ", req.body);
+
+  CommentModel.create({
+    text: req.body.newComment,
+    commentByUser: req.body.user._id,
+    episodeCommented: req.body.episodeId,
+  })
+    .then((commentCreated) => {
+      //-- Episodemodel
+      EpisodeModel.findById(req.body.episodeId)
+        .then((episode) => {
+          episode.commentId.push(commentCreated._id);
+          episode.save();
+        })
+        .catch((e) => res.json(e));
+
+      //-- Episodemodel
+    })
+    .catch((e) => console.log(e));
 });
 
 // router.post("/uploadVideo/:userId", (req, res, next) => {
@@ -196,15 +235,13 @@ router.post("/uploadVideo/:userId", (req, res, next) => {
       { new: true }
     );
   });
+});
 
-  router.get("/user", (req, res, next) => {
-    if (!user) {
-      console.log(" ERROR ---> USER IS NOt loGGeD OR NULL USER");
-    }
-    User.findById(user._id).then((result) => {
-      console.log();
-      res.json(result);
-    });
+router.put("/user", (req, res, next) => {
+  console.log("USER._ID FROM THE BACK?", req.body._id);
+
+  UserModel.findById(req.body._id).then((result) => {
+    res.json(result);
   });
 });
 
