@@ -146,7 +146,7 @@ router.get("/episodes/:episodeId", (req, res, next) => {
       res.status(500).json({ message: "Error finding episode" });
     });
 });
-//aa 
+//aa
 router.post(
   "/episodes",
   fileUploader.single("episodeImage"),
@@ -171,8 +171,15 @@ router.post(
             anime.episodes.push(response._id);
             anime.save();
           })
-
           .catch((e) => console.log(e));
+
+        UserModel.findById(req.body.userId)
+          .then((user) => {
+            user.uploadedEpisodesId.push(response._id);
+            user.save();
+          })
+          .catch((e) => console.log(e));
+
         //res.json({ animeImageUrl: req.file.path });
         res.json({ episodeImageUrl: req.file.path });
       })
@@ -203,6 +210,7 @@ router.post("/episode/:episodeId", (req, res, next) => {
         .catch((e) => res.json(e));
 
       //-- Episodemodel
+      res.json(commentCreated);
     })
     .catch((e) => console.log(e));
 });
@@ -245,27 +253,30 @@ router.put("/user", (req, res, next) => {
   });
 });
 
-router.put("/profile/edit/:profileId", fileUploader.single("profileImg"),(req, res, next)=>{
-  
-  const {username}=req.body
-  const profileUpdate ={
-    username,
-    profileImg :req.file.path
-    
+router.put(
+  "/profile/edit/:profileId",
+  fileUploader.single("profileImg"),
+  (req, res, next) => {
+    const { username } = req.body;
+    const profileUpdate = {
+      username,
+      profileImg: req.file.path,
+    };
+    console.log("Req. file desdeback: ", req.file);
+    console.log("req.body desdeBack: ", req.body);
+    console.log("req.body.username: ", req.body.userId);
+    console.log("profileUpdate: ", profileUpdate);
+    //el profileId es el parametre de ruta.
+    User.findByIdAndUpdate(req.body.userId, profileUpdate).then((results) => {
+      console.log("results desde el back edit profile: ", results);
+    });
   }
-  console.log("Req. file desdeback: ", req.file)
-  console.log("req.body desdeBack: ", req.body)
-  console.log("req.body.username: ",req.body.userId)
-  console.log("profileUpdate: ",profileUpdate)
-  //el profileId es el parametre de ruta.
-  User.findByIdAndUpdate(req.body.userId, profileUpdate) 
-   
-   .then(results=>{
-     console.log("results desde el back edit profile: ",results)
-   })
-   
+);
 
-})
+router.get("/episodes/uploaded/:userId", (req, res, next) => {
+  console.log("REQ.BODY EPISODES USER:", req.params);
 
+  UserModel.findById(req.params).populate;
+});
 
 module.exports = router;
