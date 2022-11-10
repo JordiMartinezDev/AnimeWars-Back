@@ -7,6 +7,7 @@ const multer = require("multer");
 const AnimeModel = require("../models/Anime.model");
 const EpisodeModel = require("../models/Episode.model");
 const UserModel = require("../models/User.model");
+const CommentModel = require("../models/Comment.model");
 
 //CLOUDINARY
 const fileUploader = require("../config/cloudinary.config");
@@ -132,7 +133,9 @@ router.get("/episodes/:episodeId", (req, res, next) => {
   //console.log("this is : ROUTE GET /:episodeId");
   const { episodeId } = req.params;
   EpisodeModel.findById(episodeId)
+    .populate("commentId")
     .then((episodeFromDB) => {
+      console.log("Episode Populated:", episodeFromDB);
       // console.log("Retrieved episode from DB:", episodeFromDB);
       res.status(200).json(episodeFromDB);
     })
@@ -177,10 +180,31 @@ router.post(
   }
 );
 
-router.put("episodes/:episodeId", (req, res, next) => {});
-router.delete("episodes/:episodeId", (req, res, next) => {});
-router.post("episodes/:episodeId", (req, res, next) => {
-  console.log("Try to post COMMENT in BACK Route ");
+router.put("/episodes/:episodeId", (req, res, next) => {});
+router.delete("/episodes/:episodeId", (req, res, next) => {});
+
+router.post("/episode/:episodeId", (req, res, next) => {
+  console.log("Try to post COMMENT  SEE REQ BODy: ", req.body);
+
+  CommentModel.create({
+    text: req.body.newComment,
+    commentByUser: req.body.user._id,
+    episodeCommented: req.body.episodeId,
+  })
+    .then((commentCreated) => {
+      //-- Episodemodel
+      console.log("THIS COMMENT is crEATED IN DB : ", commentCreated);
+      EpisodeModel.findById(req.body.episodeId)
+        .then((episode) => {
+          console.log("Episode found", episode);
+          episode.commentId.push(commentCreated._id);
+          episode.save();
+        })
+        .catch((e) => res.json(e));
+
+      //-- Episodemodel
+    })
+    .catch((e) => console.log(e));
 });
 
 // router.post("/uploadVideo/:userId", (req, res, next) => {
