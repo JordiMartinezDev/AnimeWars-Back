@@ -16,6 +16,7 @@ multer({
   storage: multer.diskStorage({}),
   limits: { fileSize: 500000 },
 });
+
 //funciona desde postman ok! ruta: http://localhost:3001/api/animes
 router.get("/animes", (req, res, next) => {
   // res.send(200, { animes: []});
@@ -65,23 +66,27 @@ router.post("/animes", fileUploader.single("animeImage"), (req, res, next) => {
 });
 router.put("/animes/followanime/:animeId", (req, res, next) => {
   const { animeId } = req.params;
-
-  AnimeModel.findById(animeId)
-    .then((animeFromDb) => {
-      animeFromDb.followedUsers.push(req.body.user);
-      animeFromDb.save();
-      res.json({ message: "Anime updated" });
-    })
-    .catch((e) => {
-      console.log(e);
-    });
+  let followed = false;
 
   UserModel.findById(req.body.user)
     .then((user) => {
-      console.log("Pushing " + animeId + " to user:" + user);
-      user.followedByAnimeId.push(animeId);
+      user.followedByAnimeId.map((animeIdFollowed) => {
+        if (animeIdFollowed == animeId) followed = true;
+      });
+
+      if (!followed) user.followedByAnimeId.push(animeId);
+      else user.followedByAnimeId.remove(animeId);
       user.save();
       res.json({ message: "User updated correctly" });
+      AnimeModel.findById(animeId)
+        .then((animeFromDb) => {
+          if (!followed) animeFromDb.followedUsers.push(req.body.user);
+          else animeFromDb.followedUsers.remove(req.body.user);
+          animeFromDb.save();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     })
     .catch((e) => console.log(e));
 });
@@ -154,10 +159,14 @@ router.post(
       .then((response) => {
         console.log("req.boby cl: ", req.body);
         console.log("response.data: ", response);
-        AnimeModel.findById(req.body.animeId)
+        AnimeModel.findOne;
+        AnimeModel.findOne({ name: req.body.anime })
           .then((anime) => {
+            console.log("ANIME FOUND IN DB: ", anime);
             anime.episodes.push(response._id);
+            anime.save();
           })
+
           .catch((e) => console.log(e));
         //res.json({ animeImageUrl: req.file.path });
         res.json({ episodeImageUrl: req.file.path });
@@ -202,15 +211,15 @@ router.post("/uploadVideo/:userId", (req, res, next) => {
       { new: true }
     );
   });
+});
 
-  router.get("/user", (req, res, next) => {
-    if (!user) {
-      console.log(" ERROR ---> USER IS NOt loGGeD OR NULL USER");
-    }
-    User.findById(user._id).then((result) => {
-      console.log();
-      res.json(result);
-    });
+router.get("/user", (req, res, next) => {
+  console.log("USER FROM THE BACK?", req.body);
+  if (!req.body.user) {
+    console.log(" ERROR ---> USER IS NOt loGGeD OR NULL USER");
+  }
+  UserModel.findById(req.body.user._id).then((result) => {
+    res.json(result);
   });
 });
 
