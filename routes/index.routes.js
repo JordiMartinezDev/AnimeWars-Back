@@ -24,7 +24,7 @@ router.get("/animes", (req, res, next) => {
   // res.send(200, { animes: []});
   AnimeModel.find()
     .then((animesFromDB) => {
-      // console.log("Retrieved animes from DB:", animesFromDB);
+      console.log("Retrieved animes from DB:", animesFromDB);
       // console.log("hasta aqui entra");
       res.status(200).json(animesFromDB);
       // res.json(animesFromDB);
@@ -121,7 +121,8 @@ router.get("/episodes", (req, res, next) => {
   // res.json("All good in here");
   EpisodeModel.find()
     .then((episodesFromDB) => {
-      //console.log("Retrieved episodes from DB:", episodesFromDB);
+      console.log("Retrieved episodes from DB:", episodesFromDB);
+
       res.status(200).json(episodesFromDB);
     })
     .catch((error) => {
