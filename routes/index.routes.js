@@ -264,7 +264,7 @@ router.put("/user", (req, res, next) => {
     res.json(result);
   });
 });
-
+//aaaaa
 router.put(
   "/profile/edit/:profileId",
   fileUploader.single("profileImg"),
@@ -274,19 +274,12 @@ router.put(
       username,
       profileImg: req.file.path,
     };
-    console.log("Req. file desdeback: ", req.file);
-    console.log("req.body desdeBack: ", req.body);
-    console.log("req.body.username: ", req.body.userId);
-    console.log("profileUpdate: ", profileUpdate);
-    //el profileId es el parametre de ruta.
-    User.findByIdAndUpdate(req.body.userId, profileUpdate).then((results) => {
-      console.log("results desde el back edit profile: ", results);
-    });
+    
   
-  console.log("Req. file desdeback: ", req.file)
-  console.log("req.body desdeBack: ", req.body)
-  console.log("req.body.username: ",req.body.userId)
-  console.log("profileUpdate: ",profileUpdate)
+    console.log("Req. file desdeback: ", req.file)
+    console.log("req.body desdeBack: ", req.body)
+    console.log("req.body.username: ",req.body.userId)
+    console.log("profileUpdate: ",profileUpdate)
   //el profileId es el parametre de ruta.
   User.findByIdAndUpdate(req.body.userId, profileUpdate) 
    
@@ -303,6 +296,7 @@ router.put(
 
 })
 //////// iep
+//aaaaaaaa
 router.get("/profile/:userId", (req,res, next)=>{
   const {userId}=req.params
   User.findById(userId)
@@ -315,15 +309,15 @@ router.get("/profile/:userId", (req,res, next)=>{
   })
 })
 
-router.get("/usuaris", (req,res,next)=>{
-  User.find()
-  .then (results=>{
-    res.json(results)
-  })
-  .catch(err=>{
-    next("ha fallat el then de lastoption",err)
-  })
-})
+// router.get("/usuaris", (req,res,next)=>{
+//   User.find()
+//   .then (results=>{
+//     res.json(results)
+//   })
+//   .catch(err=>{
+//     next("ha fallat el then de lastoption",err)
+//   })
+// })
 
 //router.get("/users")
 //pensa com si elperametre de ruta fos una "x" en una equacio de mates
